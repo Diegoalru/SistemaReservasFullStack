@@ -100,13 +100,22 @@ if [ ! -d "backend" ]; then
   # Configurar application.properties
   echo ">>> Configurando application.properties..."
   cat > backend/src/main/resources/application.properties << 'EOF'
+# ─── Configuración general ───
+spring.application.name=backend
+
+# ─── Configuración de la base de datos PostgreSQL ───
+
 spring.datasource.url=jdbc:postgresql://localhost:5432/appdb
 spring.datasource.username=dev
 spring.datasource.password=dev
+spring.datasource.driver-class-name=org.postgresql.Driver
+
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
-# ─── SpringDoc / Swagger UI ──────────────────────────────────────────────────
+# ─── SpringDoc / Swagger UI ───
 springdoc.swagger-ui.path=/
 springdoc.swagger-ui.operations-sorter=alpha
 springdoc.swagger-ui.display-request-duration=true
