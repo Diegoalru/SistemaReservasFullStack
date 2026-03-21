@@ -1,0 +1,66 @@
+{
+  "name": "Spring + Angular + PostgreSQL",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "jdkDistro": "ms",
+      "installMaven": true,
+      "installGradle": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24",
+      "nodeGypDependencies": true
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": true,
+      "installDockerBuildx": true
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions"
+      ]
+    }
+  },
+
+  "forwardPorts": [8080, 8081, 4200, 80, 5432],
+
+  "portsAttributes": {
+    "8080": { "label": "Backend · Docker (imagen construida)" },
+    "8081": { "label": "Backend · Dev (gradlew bootRun)" },
+    "4200": { "label": "Frontend · Dev (ng serve)" },
+    "80":   { "label": "Frontend · Docker (nginx)" },
+    "5432": { "label": "PostgreSQL" }
+  },
+
+  "postCreateCommand": "bash .devcontainer/init.sh",
+
+  "postAttachCommand": {
+    "backend": "cd backend;\n./gradlew bootRun --args='--server.port=8081'",
+    "frontend": "cd frontend;\nng serve --host 0.0.0.0 --poll 2000"
+  },
+
+  "remoteEnv": {
+    "NG_CLI_ANALYTICS": "false",
+    "DOCKER_API_VERSION": "1.43"
+  },
+
+  "remoteUser": "vscode",
+
+  "hostRequirements": {
+    "memory": "8gb",
+    "cpus": 4
+  }
+}
