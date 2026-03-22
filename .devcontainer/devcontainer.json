@@ -52,9 +52,11 @@
 
   "postCreateCommand": "bash .devcontainer/init.sh",
 
+  "postStartCommand": "bash .devcontainer/ensure-postgres.sh",
+
   "postAttachCommand": {
-    "backend": "cd ${containerWorkspaceFolder};\nbash .devcontainer/ensure-postgres.sh;\ncd backend;\n./gradlew bootRun --args='--server.port=8081'",
-    "frontend": "cd frontend;\nng serve --host 0.0.0.0 --poll 2000"
+    "backend": "cd ${containerWorkspaceFolder}/backend;\n./gradlew bootRun --args='--server.port=8081'",
+    "frontend": "cd ${containerWorkspaceFolder}/frontend;\nng serve --host 0.0.0.0 --poll 2000"
   },
 
   "remoteEnv": {
