@@ -27,6 +27,7 @@ fi
 
 # ─── 2. Angular CLI ──────────────────────────────────────────────────────────
 echo ">>> Instalando Angular CLI..."
+npm update -g npm 2>/dev/null || echo "    npm actualizado a la última versión"
 npm install -g @angular/cli@latest 2>&1
 
 # El feature de Node instala en un prefix no estándar — lo resolvemos
@@ -134,15 +135,8 @@ fi
 # ─── 4. Proyecto Angular (solo si no existe) ──────────────────────────────────
 if [ ! -d "frontend" ]; then
   echo ">>> Generando proyecto Angular..."
-  # Usar ruta absoluta del binario para evitar problemas de PATH
-  # Incluir --interactive=false para modo no-interactivo (devcontainer)
-  "$NG_BIN" new frontend \
-    --routing \
-    --style=scss \
-    --skip-git \
-    --no-ssr \
-    --defaults \
-    --interactive=false
+  # Comando en una sola linea para evitar problemas de parseo en postCreate.
+  "$NG_BIN" new frontend --routing --style=scss --skip-git --no-ssr --defaults --interactive=false
   echo "    Angular generado en ./frontend"
   
   # Copiar archivos Docker desde templates
