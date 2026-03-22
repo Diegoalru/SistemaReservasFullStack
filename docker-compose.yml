@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: spring-boot-app
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/appdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/appdb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev
       SPRING_JPA_HIBERNATE_DDL_AUTO: update

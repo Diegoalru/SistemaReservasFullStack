@@ -40,14 +40,15 @@
     }
   },
 
-  "forwardPorts": [8080, 8081, 4200, 80, 5432],
+  "forwardPorts": [8080, 8081, 4200, 80, 5432, 5433],
 
   "portsAttributes": {
     "8080": { "label": "Backend · Docker (imagen construida)" },
     "8081": { "label": "Backend · Dev (gradlew bootRun)" },
     "4200": { "label": "Frontend · Dev (ng serve)" },
     "80":   { "label": "Frontend · Docker (nginx)" },
-    "5432": { "label": "PostgreSQL" }
+    "5432": { "label": "PostgreSQL · Dev (auto en devcontainer)" },
+    "5433": { "label": "PostgreSQL · Docker Compose (prod local)" }
   },
 
   "postCreateCommand": "bash .devcontainer/init.sh",
