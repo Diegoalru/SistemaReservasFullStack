@@ -1,0 +1,50 @@
+@baseUrl = http://localhost:8081/api
+@reservationId = 1
+
+### Health check
+GET {{baseUrl}}/health
+Accept: application/json
+
+### Health database check
+GET {{baseUrl}}/health/database
+Accept: application/json
+
+### List all reservations
+GET {{baseUrl}}/reservations
+Accept: application/json
+
+### Get reservation by id
+GET {{baseUrl}}/reservations/{{reservationId}}
+Accept: application/json
+
+### Create reservation (ACTIVE)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "customerName": "Juan Perez",
+  "reservationDate": "2026-03-25",
+  "reservationTime": "14:30:00",
+  "serviceType": "Haircut"
+}
+
+### Update reservation
+PUT {{baseUrl}}/reservations/{{reservationId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "customerName": "Juan Perez Actualizado",
+  "reservationDate": "2026-03-25",
+  "reservationTime": "14:30:00",
+  "serviceType": "Haircut + Beard"
+}
+
+### Deactivate reservation (logical status update)
+PATCH {{baseUrl}}/reservations/{{reservationId}}/deactivate
+Accept: application/json
+
+### Delete reservation (physical delete)
+DELETE {{baseUrl}}/reservations/{{reservationId}}
+Accept: application/json
