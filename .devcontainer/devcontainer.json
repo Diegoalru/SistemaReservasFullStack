@@ -53,8 +53,7 @@
   },
 
   "remoteEnv": {
-    "NG_CLI_ANALYTICS": "false",
-    "DOCKER_API_VERSION": "1.43"
+    "NG_CLI_ANALYTICS": "false"
   },
 
   "remoteUser": "vscode",

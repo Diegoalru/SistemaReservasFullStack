@@ -12,9 +12,6 @@ TEMPLATES_DIR="${SCRIPT_DIR}/templates"
 export NG_CLI_ANALYTICS=false
 export NG_FORCE_AUTOCOMPLETE=false
 
-# En Codespaces, el daemon remoto puede soportar una API menor que el cliente.
-export DOCKER_API_VERSION=1.43
-
 # ─── 1. PostgreSQL 18 ────────────────────────────────────────────────────────
 echo ">>> Levantando PostgreSQL 18..."
 if docker ps --format '{{.Names}}' | grep -q '^postgres-dev$'; then
