@@ -90,7 +90,7 @@ if [ ! -d "backend" ]; then
     -d groupId=com.darssolutionscr \
     -d artifactId=backend \
     -d javaVersion=17 \
-    -d dependencies=web,data-jpa,postgresql,devtools,validation,springdoc-openapi,actuator,lombok \
+    -d dependencies=web,data-jpa,postgresql,devtools,validation,springdoc-openapi,actuator \
     -o backend.zip
   unzip -q backend.zip
   rm backend.zip
