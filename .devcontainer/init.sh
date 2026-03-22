@@ -12,21 +12,17 @@ TEMPLATES_DIR="${SCRIPT_DIR}/templates"
 export NG_CLI_ANALYTICS=false
 export NG_FORCE_AUTOCOMPLETE=false
 
+# Instalar Docker CLI si no esta disponible en el contenedor.
+if ! command -v docker >/dev/null 2>&1; then
+  echo ">>> Instalando Docker CLI..."
+  sudo apt-get update -y
+  sudo apt-get install -y docker.io
+fi
+
 # ─── 1. PostgreSQL 18 ────────────────────────────────────────────────────────
-echo ">>> Levantando PostgreSQL 18..."
-if docker ps --format '{{.Names}}' | grep -q '^postgres-dev$'; then
-  echo "    postgres-dev ya esta en ejecucion"
-elif docker ps -a --format '{{.Names}}' | grep -q '^postgres-dev$'; then
-  docker start postgres-dev >/dev/null
-else
-  docker run -d \
-    --name postgres-dev \
-    --restart unless-stopped \
-    -e POSTGRES_USER=dev \
-    -e POSTGRES_PASSWORD=dev \
-    -e POSTGRES_DB=appdb \
-    -p 5432:5432 \
-    postgres:18
+if ! bash .devcontainer/ensure-postgres.sh; then
+  echo "    WARNING: No se pudo iniciar PostgreSQL en postCreate."
+  echo "    Se reintentara en postAttach antes de arrancar el backend."
 fi
 
 # ─── 2. Angular CLI ──────────────────────────────────────────────────────────
