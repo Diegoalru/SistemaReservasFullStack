@@ -17,8 +17,10 @@ export DOCKER_API_VERSION=1.43
 
 # ─── 1. PostgreSQL 18 ────────────────────────────────────────────────────────
 echo ">>> Levantando PostgreSQL 18..."
-if docker ps -a --format '{{.Names}}' | grep -q '^postgres-dev$'; then
-  docker start postgres-dev >/dev/null || true
+if docker ps --format '{{.Names}}' | grep -q '^postgres-dev$'; then
+  echo "    postgres-dev ya esta en ejecucion"
+elif docker ps -a --format '{{.Names}}' | grep -q '^postgres-dev$'; then
+  docker start postgres-dev >/dev/null
 else
   docker run -d \
     --name postgres-dev \
