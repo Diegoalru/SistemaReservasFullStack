@@ -22,7 +22,7 @@ fi
 # ─── 1. PostgreSQL 18 ────────────────────────────────────────────────────────
 if ! bash .devcontainer/ensure-postgres.sh; then
   echo "    WARNING: No se pudo iniciar PostgreSQL en postCreate."
-  echo "    Se reintentara en postAttach antes de arrancar el backend."
+  echo "    Se reintentara en postStartCommand antes de arrancar el backend."
 fi
 
 # ─── 2. Angular CLI ──────────────────────────────────────────────────────────
