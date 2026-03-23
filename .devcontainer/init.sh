@@ -27,7 +27,11 @@ fi
 
 # ─── 2. Angular CLI ──────────────────────────────────────────────────────────
 echo ">>> Instalando Angular CLI..."
-npm update -g npm 2>/dev/null || echo "    npm actualizado a la última versión"
+if npm update -g npm >/dev/null 2>&1; then
+  echo "    npm actualizado a la última versión"
+else
+  echo "    WARNING: no se pudo actualizar npm; se continuará con la versión actual"
+fi
 npm install -g @angular/cli@latest 2>&1
 
 # El feature de Node instala en un prefix no estándar — lo resolvemos
