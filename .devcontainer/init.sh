@@ -12,25 +12,26 @@ TEMPLATES_DIR="${SCRIPT_DIR}/templates"
 export NG_CLI_ANALYTICS=false
 export NG_FORCE_AUTOCOMPLETE=false
 
+# Instalar Docker CLI si no esta disponible en el contenedor.
+if ! command -v docker >/dev/null 2>&1; then
+  echo ">>> Instalando Docker CLI..."
+  sudo apt-get update -y
+  sudo apt-get install -y docker.io
+fi
+
 # ─── 1. PostgreSQL 18 ────────────────────────────────────────────────────────
-echo ">>> Levantando PostgreSQL 18..."
-if docker ps --format '{{.Names}}' | grep -q '^postgres-dev$'; then
-  echo "    postgres-dev ya esta en ejecucion"
-elif docker ps -a --format '{{.Names}}' | grep -q '^postgres-dev$'; then
-  docker start postgres-dev >/dev/null
-else
-  docker run -d \
-    --name postgres-dev \
-    --restart unless-stopped \
-    -e POSTGRES_USER=dev \
-    -e POSTGRES_PASSWORD=dev \
-    -e POSTGRES_DB=appdb \
-    -p 5432:5432 \
-    postgres:18
+if ! bash .devcontainer/ensure-postgres.sh; then
+  echo "    WARNING: No se pudo iniciar PostgreSQL en postCreate."
+  echo "    Se reintentara en postStartCommand antes de arrancar el backend."
 fi
 
 # ─── 2. Angular CLI ──────────────────────────────────────────────────────────
 echo ">>> Instalando Angular CLI..."
+if npm update -g npm >/dev/null 2>&1; then
+  echo "    npm actualizado a la última versión"
+else
+  echo "    WARNING: no se pudo actualizar npm; se continuará con la versión actual"
+fi
 npm install -g @angular/cli@latest 2>&1
 
 # El feature de Node instala en un prefix no estándar — lo resolvemos
@@ -138,15 +139,8 @@ fi
 # ─── 4. Proyecto Angular (solo si no existe) ──────────────────────────────────
 if [ ! -d "frontend" ]; then
   echo ">>> Generando proyecto Angular..."
-  # Usar ruta absoluta del binario para evitar problemas de PATH
-  # Incluir --interactive=false para modo no-interactivo (devcontainer)
-  "$NG_BIN" new frontend \
-    --routing \
-    --style=scss \
-    --skip-git \
-    --no-ssr \
-    --defaults \
-    --interactive=false
+  # Comando en una sola linea para evitar problemas de parseo en postCreate.
+  "$NG_BIN" new frontend --routing --style=scss --skip-git --no-ssr --defaults --interactive=false
   echo "    Angular generado en ./frontend"
   
   # Copiar archivos Docker desde templates

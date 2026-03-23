@@ -2,18 +2,23 @@
   "name": "Spring + Angular + PostgreSQL",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
 
+  "mounts": [
+    "source=dind-var-lib-docker-${devcontainerId},target=/var/lib/docker,type=volume"
+  ],
+
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "version": "17",
       "jdkDistro": "ms",
-      "installMaven": true,
-      "installGradle": true
+      "installMaven": false,
+      "installGradle": false
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24",
-      "nodeGypDependencies": true
+      "nodeGypDependencies": false
     },
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
       "moby": true,
       "installDockerBuildx": true
     },
@@ -35,24 +40,28 @@
     }
   },
 
-  "forwardPorts": [8080, 8081, 4200, 80, 5432],
+  "forwardPorts": [8080, 8081, 4200, 80, 5432, 5433],
 
   "portsAttributes": {
     "8080": { "label": "Backend · Docker (imagen construida)" },
     "8081": { "label": "Backend · Dev (gradlew bootRun)" },
     "4200": { "label": "Frontend · Dev (ng serve)" },
     "80":   { "label": "Frontend · Docker (nginx)" },
-    "5432": { "label": "PostgreSQL" }
+    "5432": { "label": "PostgreSQL · Dev (auto en devcontainer)" },
+    "5433": { "label": "PostgreSQL · Docker Compose (prod local)" }
   },
 
   "postCreateCommand": "bash .devcontainer/init.sh",
 
+  "postStartCommand": "bash .devcontainer/ensure-postgres.sh",
+
   "postAttachCommand": {
-    "backend": "cd backend;\n./gradlew bootRun --args='--server.port=8081'",
-    "frontend": "cd frontend;\nng serve --host 0.0.0.0 --poll 2000"
+    "backend": "cd ${containerWorkspaceFolder}/backend;\n./gradlew bootRun --args='--server.port=8081'",
+    "frontend": "cd ${containerWorkspaceFolder}/frontend;\nng serve --host 0.0.0.0 --poll 2000"
   },
 
   "remoteEnv": {
+    "DOCKER_HOST": "unix:///var/run/docker.sock",
     "NG_CLI_ANALYTICS": "false"
   },
 

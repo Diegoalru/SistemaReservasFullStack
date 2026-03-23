@@ -2,10 +2,10 @@
 
 Plantilla de desarrollo para levantar un entorno completo con:
 - Java 17 (JDK Microsoft)
-- Gradle y Maven disponibles en el contenedor
+- Gradle wrapper disponible (instalado por Spring Boot generado; `gradle` y `mvn` no están en el PATH)
 - Node.js 24 y Angular CLI
 - PostgreSQL 18
-- Docker y Docker Compose (docker-outside-of-docker)
+- Docker y Docker Compose (docker-in-docker)
 
 ## Flujo del repositorio
 
@@ -37,7 +37,8 @@ La configuración del backend deja Swagger en la raíz mediante:
 | 8080 | Backend en modo Docker |
 | 4200 | Frontend en modo desarrollo (ng serve) |
 | 80 | Frontend en modo Docker (nginx) |
-| 5432 | PostgreSQL |
+| 5432 | PostgreSQL de desarrollo (auto en devcontainer) |
+| 5433 | PostgreSQL de Docker Compose (entorno prod local) |
 
 ## Comandos útiles
 
@@ -64,6 +65,8 @@ docker compose down
 
 ## Base de datos
 
+### Entorno desarrollo (devcontainer)
+
 - Host: localhost
 - Puerto: 5432
 - Base de datos: appdb
@@ -75,6 +78,22 @@ Cadena JDBC (desarrollo):
 ```text
 jdbc:postgresql://localhost:5432/appdb
 ```
+
+### Entorno prod local (docker compose)
+
+- Host: localhost
+- Puerto: 5433
+- Base de datos: appdb
+- Usuario: dev
+- Password: dev
+
+Cadena JDBC (acceso desde host/devcontainer):
+
+```text
+jdbc:postgresql://localhost:5433/appdb
+```
+
+Nota: dentro de la red interna de Docker Compose, el backend se conecta a PostgreSQL con el puerto 5432 del servicio `postgres`.
 
 ## Re-ejecutar bootstrap manualmente
 
