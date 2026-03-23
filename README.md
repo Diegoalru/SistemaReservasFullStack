@@ -2,10 +2,10 @@
 
 Plantilla de desarrollo para levantar un entorno completo con:
 - Java 17 (JDK Microsoft)
-- Gradle y Maven disponibles en el contenedor
+- Gradle wrapper disponible (instalado por Spring Boot generado; `gradle` y `mvn` no están en el PATH)
 - Node.js 24 y Angular CLI
 - PostgreSQL 18
-- Docker y Docker Compose (docker-outside-of-docker)
+- Docker y Docker Compose (docker-in-docker)
 
 ## Flujo del repositorio
 
