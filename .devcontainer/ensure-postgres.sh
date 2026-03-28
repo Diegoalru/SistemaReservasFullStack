@@ -21,6 +21,9 @@ configure_iptables_backend() {
   if command -v update-alternatives >/dev/null 2>&1; then
     run_as_root update-alternatives --set iptables /usr/sbin/iptables-nft >/dev/null 2>&1 || true
     run_as_root update-alternatives --set ip6tables /usr/sbin/ip6tables-nft >/dev/null 2>&1 || true
+    
+    # Fuerzas el reinicio de docker tras aplicar el cambio para que tome la nueva configuración de red
+    run_as_root pkill dockerd || true
   fi
 }
 
